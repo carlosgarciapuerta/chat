@@ -10,6 +10,10 @@ import java.util.Date;
 public class Session {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
     private String token;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,6 +27,14 @@ public class Session {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date expirationTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getToken() {
         return token;
@@ -63,13 +75,13 @@ public class Session {
 
         Session session = (Session) o;
 
-        if (token != null ? !token.equals(session.token) : session.token != null) return false;
+        if (id != null ? !id.equals(session.id) : session.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return token != null ? token.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
     }
 }

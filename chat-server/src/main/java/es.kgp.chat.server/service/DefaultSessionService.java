@@ -6,9 +6,10 @@ import es.kgp.chat.server.model.Session;
 import es.kgp.chat.server.model.User;
 import es.kgp.chat.server.repository.SessionRepository;
 import es.kgp.chat.server.repository.UserRepository;
-import es.kgp.chat.server.security.Login;
+import es.kgp.chat.server.controller.security.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.Charset;
 import java.util.Date;
@@ -57,8 +58,12 @@ public class DefaultSessionService implements SessionService{
     }
 
     @Override
+    @Transactional
     public Session refreshToken(String token, String userAgent){
         Session session = validateToken(token);
+        if (session == null){
+            throw new UnauthorizedException("Invalid Credentials.");
+        }
         token = createHashForClientSessionId(userAgent, new Date().getTime(), session.getUser().getNickname());
         session.setToken(token);
         session.setExpirationTime(null);

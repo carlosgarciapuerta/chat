@@ -1,4 +1,4 @@
-package es.kgp.chat.server.controller;
+package es.kgp.chat.server.controller.security;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

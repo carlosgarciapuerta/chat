@@ -1,7 +1,8 @@
 package es.kgp.chat.server.controller;
 
-import es.kgp.chat.server.security.CookieBuilder;
-import es.kgp.chat.server.security.Login;
+import es.kgp.chat.server.controller.security.NotSecured;
+import es.kgp.chat.server.controller.security.CookieBuilder;
+import es.kgp.chat.server.controller.security.Login;
 import es.kgp.chat.server.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class LoginController {
         String token = sessionService.login(login, userAgent);
         Cookie sessionToken = new CookieBuilder("sessionToken", token)
             //.secured(true)
-            .withDomain("*")
+            .withDomain("127.0.0.1")
             .withMaxAge(900)
             .withPath("/")
             .build();
@@ -39,6 +40,7 @@ public class LoginController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @NotSecured
     public void logout(@CookieValue("sessionToken") String token){
         sessionService.logout(token);
     }

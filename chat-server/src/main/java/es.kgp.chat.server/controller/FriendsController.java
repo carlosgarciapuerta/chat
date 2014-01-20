@@ -13,7 +13,7 @@ public class FriendsController {
     @RequestMapping(value = "/friends", method = RequestMethod.POST)
     @ResponseBody
     public String findAllFriends(Session session) throws Exception {
-        System.out.println(session);
+
         return "sadasdas";
     }
 

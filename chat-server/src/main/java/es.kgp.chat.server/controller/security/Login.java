@@ -1,4 +1,4 @@
-package es.kgp.chat.server.security;
+package es.kgp.chat.server.controller.security;
 
 /**
  * Created by kgp on 19/01/2014.

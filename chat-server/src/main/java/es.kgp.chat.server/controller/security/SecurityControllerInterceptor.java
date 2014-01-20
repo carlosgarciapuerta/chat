@@ -1,8 +1,7 @@
-package es.kgp.chat.server.controller;
+package es.kgp.chat.server.controller.security;
 
 import es.kgp.chat.server.exception.UnauthorizedException;
 import es.kgp.chat.server.model.Session;
-import es.kgp.chat.server.security.CookieBuilder;
 import es.kgp.chat.server.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,21 +36,15 @@ public class SecurityControllerInterceptor implements HandlerInterceptor{
             if (sessionToken != null){
                 Session session = sessionService.refreshToken(sessionToken.getValue(), httpServletRequest.getHeader("User-Agent"));
                 sessionToken = new CookieBuilder(sessionToken.getName(), session.getToken())
-                        //.secured(true)
                         .withDomain(httpServletRequest.getHeader("Origin"))
                         .withMaxAge(900)
                         .withPath("/")
                         .build();
                 httpServletResponse.addCookie(sessionToken);
-                httpServletRequest.setAttribute("sessionToken", sessionToken);
+                httpServletRequest.setAttribute("session", session);
                 return true;
             } else {
-                //throw new UnauthorizedException("Invalid credentials.");
-                Session session = new Session();
-                session.setToken("asdasdasd");
-                httpServletRequest.setAttribute("sessionToken", session);
-                handlerMethod.getMethodParameters()[0].getConstructor().newInstance();
-                return true;
+                throw new UnauthorizedException("Invalid credientials.");
             }
         } else{
             return true;
@@ -65,6 +58,7 @@ public class SecurityControllerInterceptor implements HandlerInterceptor{
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception e) throws Exception {
+
 
     }
 }

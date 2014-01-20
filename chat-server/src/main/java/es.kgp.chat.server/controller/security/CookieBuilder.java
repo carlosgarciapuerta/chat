@@ -1,4 +1,4 @@
-package es.kgp.chat.server.security;
+package es.kgp.chat.server.controller.security;
 
 import javax.servlet.http.Cookie;
 
