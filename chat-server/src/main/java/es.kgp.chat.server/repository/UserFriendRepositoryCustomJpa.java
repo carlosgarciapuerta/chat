@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
  * Created by kgp on 19/01/2014.
  */
 @Repository
+@Transactional
 public class UserFriendRepositoryCustomJpa implements UserFriendRepositoryCustom {
 
     @PersistenceContext

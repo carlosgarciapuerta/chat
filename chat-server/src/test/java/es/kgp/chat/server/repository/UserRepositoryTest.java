@@ -3,6 +3,7 @@ package es.kgp.chat.server.repository;
 import es.kgp.chat.server.config.ApplicationConfig;
 import es.kgp.chat.server.config.DataSourceTestConfig;
 import es.kgp.chat.server.model.User;
+import es.kgp.chat.server.model.UserFriend;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +29,9 @@ public class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Test
     public void should_insert_user(){
@@ -66,6 +74,44 @@ public class UserRepositoryTest {
         user2.setPassword("password");
 
         userRepository.save(user2);
+    }
+
+    @Test
+    public void should_return_a_list_of_friends(){
+        User user1 = new User();
+        user1.setNickname("user1");
+        user1.setPassword("password");
+
+        User user2 = new User();
+        user2.setNickname("user2");
+        user2.setPassword("password");
+
+        User user3 = new User();
+        user3.setNickname("user3");
+        user3.setPassword("password");
+
+        UserFriend userFriend1 = new UserFriend();
+        userFriend1.setFriend(user1);
+        userFriend1.setFriendOf(user2);
+
+        UserFriend userFriend2 = new UserFriend();
+        userFriend2.setFriend(user1);
+        userFriend2.setFriendOf(user3);
+
+        user1.setFriends(new ArrayList<UserFriend>());
+        user1.getFriends().add(userFriend1);
+        user1.getFriends().add(userFriend2);
+
+        user1 = userRepository.save(user1);
+        user2 = userRepository.save(user2);
+        user3 = userRepository.save(user3);
+
+        em.persist(userFriend1);
+        em.persist(userFriend2);
+
+        assertEquals(2, userRepository.findAllFriends(user1.getId()).size());
+
+
     }
 
 
