@@ -1,8 +1,8 @@
 package es.kgp.chat.server.controller;
 
-import es.kgp.chat.server.controller.security.NotSecured;
 import es.kgp.chat.server.controller.security.CookieBuilder;
 import es.kgp.chat.server.controller.security.Login;
+import es.kgp.chat.server.controller.security.NotSecured;
 import es.kgp.chat.server.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +23,9 @@ public class LoginController {
     private SessionService sessionService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @NotSecured
-    public String login(@RequestBody @Valid Login login, @RequestHeader("User-Agent") String userAgent, @RequestHeader("Origin") String origin, HttpServletResponse response){
+    public void login(@RequestBody @Valid Login login, @RequestHeader("User-Agent") String userAgent, @RequestHeader("Origin") String origin, HttpServletResponse response){
         String token = sessionService.login(login, userAgent);
         Cookie sessionToken = new CookieBuilder("sessionToken", token)
             //.secured(true)
@@ -35,7 +35,6 @@ public class LoginController {
             .build();
 
         response.addCookie(sessionToken);
-        return "1234567890";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

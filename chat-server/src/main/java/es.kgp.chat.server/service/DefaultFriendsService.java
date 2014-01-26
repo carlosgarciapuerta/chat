@@ -25,7 +25,7 @@ public class DefaultFriendsService implements FriendsService{
 
     @Override
     public List<User> findAllFriends(Long userId) {
-        return userRepository.findAllFriends(userId);
+        return userRepository.findAllFriends(userId, true);
     }
 
     @Override
@@ -41,12 +41,17 @@ public class DefaultFriendsService implements FriendsService{
     }
 
     @Override
-    public void acceptFriendRequest(Long friendRequestId) {
-        userFriendRepository.updateFriendRequest(friendRequestId, true);
+    public void acceptFriendRequest(Long userId, String friendNickName) {
+        userFriendRepository.updateFriendRequest(userId, friendNickName, true);
     }
 
     @Override
-    public void cancellFriendRequest(Long friendRequestId) {
-        userFriendRepository.delete(friendRequestId);
+    public void cancelFriendRequest(Long userId, String friendNickName) {
+        userFriendRepository.delete(userId, friendNickName);
+    }
+
+    @Override
+    public List<User> findAllFriendRequests(Long userId) {
+        return userRepository.findAllFriends(userId, false);
     }
 }

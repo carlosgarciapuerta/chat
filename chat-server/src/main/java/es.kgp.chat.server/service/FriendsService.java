@@ -14,8 +14,9 @@ public interface FriendsService {
 
     public UserFriend sendFriendRequest(Long userId, String friendNickname);
 
-    public void acceptFriendRequest(Long friendRequestId);
+    public void acceptFriendRequest(Long userId, String friendNickName);
 
-    public void cancellFriendRequest(Long friendRequestId);
+    public void cancelFriendRequest(Long userId, String friendNickName);
 
+    List<User> findAllFriendRequests(Long userId);
 }

@@ -36,12 +36,12 @@ public class DefaultChatService implements ChatService{
 
     @Override
     @Transactional
-    public Chat startChat(Long userId, List<Long> friendsId) {
-        validateFriendsOfAUser(userId, friendsId);
-        List<User> users = userRepository.findAll(friendsId);
+    public Chat startChat(Long userId, List<String> friendsNickname) {
+        validateFriendsOfAUser(userId, friendsNickname);
+        List<User> users = userRepository.findAll(friendsNickname);
         StringBuilder sb = new StringBuilder();
         Chat chat = new Chat();
-        List<ChatUser> chatUsers = new ArrayList<>(friendsId.size() + 1);
+        List<ChatUser> chatUsers = new ArrayList<>(friendsNickname.size() + 1);
 
         ChatUser chatUser = new ChatUser();
         chatUser.setUser(userRepository.findOne(userId));
@@ -63,15 +63,16 @@ public class DefaultChatService implements ChatService{
     }
 
     @Override
-    public void validateFriendsOfAUser(Long userId, List<Long> friendsId) {
-        List<UserFriend> userFriends = userFriendRepository.validateFriendsForAUser(userId, friendsId);
-        if (userFriends.size() != friendsId.size()){
+    public void validateFriendsOfAUser(Long userId, List<String> friendsNickname) {
+        List<UserFriend> userFriends = userFriendRepository.validateFriendsForAUser(userId, friendsNickname);
+        if (userFriends.size() != friendsNickname.size()){
             throw new InvalidActionException("You are not friend of all the users you requested.");
         }
     }
 
     @Override
-    public Page<ChatMessage> findMessages(Long chatId, int page) {
+    public Page<ChatMessage> findMessages(Long chatId, int page, Long userId) {
+        validateUserInChat(userId, chatId);
         return chatMessageRepository.findMessagesByChatId(chatId, new PageRequest(page, PAGE_SIZE));
     }
 
@@ -91,7 +92,7 @@ public class DefaultChatService implements ChatService{
     public User validateUserInChat(Long userId, Long chatId) {
         User user = userRepository.findByUserInChat(userId, chatId);
         if (user == null){
-            throw new InvalidActionException("You cannot send a message in this chat.");
+            throw new InvalidActionException("You cannot access this chat.");
         }
         return user;
     }

@@ -92,27 +92,27 @@ public class DefaultChatServiceIntegrationTest {
         expectedException.expect(InvalidActionException.class);
         expectedException.expectMessage("You are not friend of all the users you requested.");
 
-        List<Long> friendsId = new ArrayList<>();
-        friendsId.add(userRepository.findByNickname(USER_1).getId());
-        friendsId.add(userRepository.findByNickname(USER_3).getId());
+        List<String> friendsId = new ArrayList<>();
+        friendsId.add(USER_1);
+        friendsId.add(USER_3);
 
         chatService.validateFriendsOfAUser(userRepository.findByNickname(USER_2).getId(), friendsId);
     }
 
     @Test
     public void should_validate_user_and_the_friends(){
-        List<Long> friendsId = new ArrayList<>();
-        friendsId.add(userRepository.findByNickname(USER_2).getId());
-        friendsId.add(userRepository.findByNickname(USER_3).getId());
+        List<String> friendsId = new ArrayList<>();
+        friendsId.add(USER_2);
+        friendsId.add(USER_3);
 
         chatService.validateFriendsOfAUser(userRepository.findByNickname(USER_1).getId(), friendsId);
     }
 
     @Test
     public void should_create_a_chat(){
-        List<Long> friendsId = new ArrayList<>();
-        friendsId.add(userRepository.findByNickname(USER_2).getId());
-        friendsId.add(userRepository.findByNickname(USER_3).getId());
+        List<String> friendsId = new ArrayList<>();
+        friendsId.add(USER_2);
+        friendsId.add(USER_3);
 
         Chat chat = chatService.startChat(userRepository.findByNickname(USER_1).getId(), friendsId);
 

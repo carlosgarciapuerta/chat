@@ -2,7 +2,6 @@ package es.kgp.chat.server.repository;
 
 import es.kgp.chat.server.config.ApplicationConfig;
 import es.kgp.chat.server.config.DataSourceTestConfig;
-import es.kgp.chat.server.config.MySQLDataSourceConfig;
 import es.kgp.chat.server.model.User;
 import es.kgp.chat.server.model.UserFriend;
 import org.junit.Before;
@@ -14,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import java.util.ArrayList;
@@ -75,7 +73,7 @@ public class UserFriendRepositoryTest {
     @Test
     public void should_update_to_accepted_friend_request(){
         UserFriend friendRequest = insertUserFriend();
-        userFriendRepository.updateFriendRequest(friendRequest.getId(), true);
+        userFriendRepository.updateFriendRequest(user1.getId(), user2.getNickname(), true);
         UserFriend updatedFriendRequest = userFriendRepository.findOne(friendRequest.getId());
 
         assertTrue(updatedFriendRequest.getAccepted());
@@ -84,12 +82,12 @@ public class UserFriendRepositoryTest {
     @Test
     public void should_validate_friends_of_a_user(){
         UserFriend userFriend = insertUserFriend();
-        List<Long> friendsId = new ArrayList<>();
-        friendsId.add(user2.getId());
+        List<String> friendsId = new ArrayList<>();
+        friendsId.add(user2.getNickname());
         List<UserFriend> userFriends = userFriendRepository.validateFriendsForAUser(user1.getId(), friendsId);
 
-        List<Long> friendsIdSymmetric = new ArrayList<>();
-        friendsIdSymmetric.add(user1.getId());
+        List<String> friendsIdSymmetric = new ArrayList<>();
+        friendsIdSymmetric.add(user1.getNickname());
         List<UserFriend> userFriendsSymmetric = userFriendRepository.validateFriendsForAUser(user2.getId(), friendsIdSymmetric);
 
         assertEquals(1, userFriends.size());

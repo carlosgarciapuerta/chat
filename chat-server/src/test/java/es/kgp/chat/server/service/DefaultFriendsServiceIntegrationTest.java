@@ -74,7 +74,7 @@ public class DefaultFriendsServiceIntegrationTest {
     public void should_accept_friend_request(){
         UserFriend userFriend = insertUserFriend();
 
-        friendsService.acceptFriendRequest(userFriend.getId());
+        friendsService.acceptFriendRequest(user1.getId(), user2.getNickname());
 
         UserFriend updatedFriendRequest = entityManager.find(UserFriend.class, userFriend.getId());
         entityManager.refresh(updatedFriendRequest);
@@ -83,10 +83,10 @@ public class DefaultFriendsServiceIntegrationTest {
     }
 
     @Test
-    public void should_cancell_friend_request(){
+    public void should_cancel_friend_request(){
         UserFriend userFriend = insertUserFriend();
 
-        friendsService.cancellFriendRequest(userFriend.getId());
+        friendsService.cancelFriendRequest(user1.getId(), user2.getNickname());
 
         UserFriend updatedFriendRequest = entityManager.find(UserFriend.class, userFriend.getId());
 
