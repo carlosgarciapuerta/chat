@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by kgp on 18/01/2014.
  */
 @Entity
-public class Message {
+public class ChatMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -57,11 +57,11 @@ public class Message {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Message)) return false;
+        if (!(o instanceof ChatMessage)) return false;
 
-        Message message = (Message) o;
+        ChatMessage chatMessage = (ChatMessage) o;
 
-        if (id != null ? !id.equals(message.id) : message.id != null) return false;
+        if (id != null ? !id.equals(chatMessage.id) : chatMessage.id != null) return false;
 
         return true;
     }

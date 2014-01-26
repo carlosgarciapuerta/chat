@@ -25,7 +25,7 @@ public class User {
     private List<UserFriend> friendsOf;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<UserChat> userChats;
+    private List<ChatUser> chatUsers;
 
     public Long getId() {
         return id;
@@ -67,12 +67,12 @@ public class User {
         this.friendsOf = friendsOf;
     }
 
-    public List<UserChat> getUserChats() {
-        return userChats;
+    public List<ChatUser> getChatUsers() {
+        return chatUsers;
     }
 
-    public void setUserChats(List<UserChat> userChats) {
-        this.userChats = userChats;
+    public void setChatUsers(List<ChatUser> chatUsers) {
+        this.chatUsers = chatUsers;
     }
 
     @Override
@@ -90,5 +90,14 @@ public class User {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

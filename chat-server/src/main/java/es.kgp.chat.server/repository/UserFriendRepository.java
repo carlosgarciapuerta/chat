@@ -1,10 +1,14 @@
 package es.kgp.chat.server.repository;
 
 import es.kgp.chat.server.model.UserFriend;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by kgp on 17/01/2014.
@@ -12,7 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserFriendRepository extends JpaRepository<UserFriend, Long> {
 
-    @Query("select uf from UserFriend uf where uf.friend.id = :friendId and uf.friendOf.id = :friendOfId and uf.accepted = true")
+    @Query("select uf from UserFriend uf where uf.friend.id = :friendId and uf.friendOf.id = :friendOfId")
     UserFriend findByFriendAndFriendOf(@Param("friendId")Long friendId, @Param("friendOfId") Long friendOfId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("update UserFriend uf set uf.accepted = :accepted where uf.id = :id")
+    void updateFriendRequest(@Param("id")Long friendRequestId, @Param("accepted")boolean accepted);
+
+    @Query("select uf from UserFriend uf where (uf.friend.id = :userId and uf.friendOf.id in (:friendsId)) or (uf.friend.id in (:friendsId) and uf.friendOf.id = :userId)")
+    List<UserFriend> validateFriendsForAUser(@Param("userId") Long userId, @Param("friendsId") List<Long> friendsId);
 
 }

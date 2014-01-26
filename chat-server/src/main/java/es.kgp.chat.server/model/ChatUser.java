@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(uniqueConstraints =
     @UniqueConstraint(columnNames = {"user_id", "chat_id"})
 )
-public class UserChat {
+public class ChatUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -50,13 +50,13 @@ public class UserChat {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserChat)) return false;
+        if (!(o instanceof ChatUser)) return false;
 
-        UserChat userChat = (UserChat) o;
+        ChatUser chatUser = (ChatUser) o;
 
-        if (chat != null ? !chat.equals(userChat.chat) : userChat.chat != null) return false;
-        if (id != null ? !id.equals(userChat.id) : userChat.id != null) return false;
-        if (user != null ? !user.equals(userChat.user) : userChat.user != null) return false;
+        if (chat != null ? !chat.equals(chatUser.chat) : chatUser.chat != null) return false;
+        if (id != null ? !id.equals(chatUser.id) : chatUser.id != null) return false;
+        if (user != null ? !user.equals(chatUser.user) : chatUser.user != null) return false;
 
         return true;
     }

@@ -11,4 +11,11 @@ import java.util.List;
 public interface FriendsService {
 
     List<User> findAllFriends(Long userId);
+
+    public UserFriend sendFriendRequest(Long userId, String friendNickname);
+
+    public void acceptFriendRequest(Long friendRequestId);
+
+    public void cancellFriendRequest(Long friendRequestId);
+
 }

@@ -15,14 +15,17 @@ public class Chat {
     private Long id;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chat")
-    private List<UserChat> userChats;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chat", cascade = {CascadeType.PERSIST})
+    private List<ChatUser> chatUsers;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "chat")
-    private List<Message> messages;
+    private List<ChatMessage> chatMessages;
 
     public Long getId() {
         return id;
@@ -30,6 +33,14 @@ public class Chat {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getCreationDate() {
@@ -40,20 +51,20 @@ public class Chat {
         this.creationDate = creationDate;
     }
 
-    public List<UserChat> getUserChats() {
-        return userChats;
+    public List<ChatUser> getChatUsers() {
+        return chatUsers;
     }
 
-    public void setUserChats(List<UserChat> userChats) {
-        this.userChats = userChats;
+    public void setChatUsers(List<ChatUser> chatUsers) {
+        this.chatUsers = chatUsers;
     }
 
-    public List<Message> getMessages() {
-        return messages;
+    public List<ChatMessage> getChatMessages() {
+        return chatMessages;
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
+    public void setChatMessages(List<ChatMessage> chatMessages) {
+        this.chatMessages = chatMessages;
     }
 
     @Override
