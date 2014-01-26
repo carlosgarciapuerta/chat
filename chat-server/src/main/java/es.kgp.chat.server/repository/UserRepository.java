@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
     @Query("select u from User u INNER JOIN u.friends userFriend JOIN userFriend.friend friend JOIN userFriend.friendOf friendOf where (friend.id = :userId or friendOf = :userId) and userFriend.accepted = true")
     List<User> findAllFriends(@Param("userId") Long userId);
+
+    @Query("select u from Chat c JOIN c.chatUsers cu JOIN cu.user u where u.id = :userId and c.id = :chatId")
+    User findByUserInChat(@Param("userId") Long userId, @Param("chatId") Long chatId);
 }

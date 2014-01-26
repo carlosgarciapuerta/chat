@@ -32,6 +32,11 @@ import static org.junit.Assert.assertEquals;
 @Transactional
 public class DefaultChatServiceIntegrationTest {
 
+    public static final String USER_1 = "user1";
+    public static final String USER_3 = "user3";
+    public static final String USER_2 = "user2";
+    public static final String PASSWORD = "password";
+
     @Autowired
     private ChatService chatService;
 
@@ -50,16 +55,16 @@ public class DefaultChatServiceIntegrationTest {
     @Before
     public void setup(){
         user1 = new User();
-        user1.setNickname("user1");
-        user1.setPassword("password");
+        user1.setNickname(USER_1);
+        user1.setPassword(PASSWORD);
 
         user2 = new User();
-        user2.setNickname("user2");
-        user2.setPassword("password");
+        user2.setNickname(USER_2);
+        user2.setPassword(PASSWORD);
 
         user3 = new User();
-        user3.setNickname("user3");
-        user3.setPassword("password");
+        user3.setNickname(USER_3);
+        user3.setPassword(PASSWORD);
 
         entityManager.persist(user1);
         entityManager.persist(user2);
@@ -88,28 +93,28 @@ public class DefaultChatServiceIntegrationTest {
         expectedException.expectMessage("You are not friend of all the users you requested.");
 
         List<Long> friendsId = new ArrayList<>();
-        friendsId.add(userRepository.findByNickname("user1").getId());
-        friendsId.add(userRepository.findByNickname("user3").getId());
+        friendsId.add(userRepository.findByNickname(USER_1).getId());
+        friendsId.add(userRepository.findByNickname(USER_3).getId());
 
-        chatService.validateFriendsOfAUser(userRepository.findByNickname("user2").getId(), friendsId);
+        chatService.validateFriendsOfAUser(userRepository.findByNickname(USER_2).getId(), friendsId);
     }
 
     @Test
     public void should_validate_user_and_the_friends(){
         List<Long> friendsId = new ArrayList<>();
-        friendsId.add(userRepository.findByNickname("user2").getId());
-        friendsId.add(userRepository.findByNickname("user3").getId());
+        friendsId.add(userRepository.findByNickname(USER_2).getId());
+        friendsId.add(userRepository.findByNickname(USER_3).getId());
 
-        chatService.validateFriendsOfAUser(userRepository.findByNickname("user1").getId(), friendsId);
+        chatService.validateFriendsOfAUser(userRepository.findByNickname(USER_1).getId(), friendsId);
     }
 
     @Test
     public void should_create_a_chat(){
         List<Long> friendsId = new ArrayList<>();
-        friendsId.add(userRepository.findByNickname("user2").getId());
-        friendsId.add(userRepository.findByNickname("user3").getId());
+        friendsId.add(userRepository.findByNickname(USER_2).getId());
+        friendsId.add(userRepository.findByNickname(USER_3).getId());
 
-        Chat chat = chatService.startChat(userRepository.findByNickname("user1").getId(), friendsId);
+        Chat chat = chatService.startChat(userRepository.findByNickname(USER_1).getId(), friendsId);
 
         assertEquals(user1.getNickname() + ", " + user2.getNickname() + ", " + user3.getNickname(), chat.getName());
         assertEquals(3, chat.getChatUsers().size());

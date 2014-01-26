@@ -1,6 +1,7 @@
 package es.kgp.chat.server.controller;
 
 import es.kgp.chat.server.exception.GenericErrorResponse;
+import es.kgp.chat.server.exception.InvalidActionException;
 import es.kgp.chat.server.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,11 @@ public class WebExceptionHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
     public @ResponseBody ResponseEntity<GenericErrorResponse> handleUnauthorizedException(UnauthorizedException exception){
+        return new ResponseEntity<>(new GenericErrorResponse(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InvalidActionException.class)
+    public @ResponseBody ResponseEntity<GenericErrorResponse> handleInvalidActionException(InvalidActionException exception){
         return new ResponseEntity<>(new GenericErrorResponse(exception.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 

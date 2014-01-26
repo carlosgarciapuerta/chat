@@ -1,14 +1,14 @@
 package es.kgp.chat.server.service;
 
 import es.kgp.chat.server.exception.InvalidActionException;
-import es.kgp.chat.server.model.Chat;
-import es.kgp.chat.server.model.User;
-import es.kgp.chat.server.model.ChatUser;
-import es.kgp.chat.server.model.UserFriend;
+import es.kgp.chat.server.model.*;
+import es.kgp.chat.server.repository.ChatMessageRepository;
 import es.kgp.chat.server.repository.ChatRepository;
 import es.kgp.chat.server.repository.UserFriendRepository;
 import es.kgp.chat.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +30,9 @@ public class DefaultChatService implements ChatService{
 
     @Autowired
     private UserFriendRepository userFriendRepository;
+
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
 
     @Override
     @Transactional
@@ -65,6 +68,32 @@ public class DefaultChatService implements ChatService{
         if (userFriends.size() != friendsId.size()){
             throw new InvalidActionException("You are not friend of all the users you requested.");
         }
+    }
+
+    @Override
+    public Page<ChatMessage> findMessages(Long chatId, int page) {
+        return chatMessageRepository.findMessagesByChatId(chatId, new PageRequest(page, PAGE_SIZE));
+    }
+
+    @Override
+    public ChatMessage sendMessage(Long userId, Long chatId, String text){
+        User user = validateUserInChat(userId, chatId);
+        Chat chat = chatRepository.findOne(chatId);
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setUser(user);
+        chatMessage.setText(text);
+        chatMessage.setSent(new Date());
+        chatMessage.setChat(chat);
+        return chatMessageRepository.save(chatMessage);
+    }
+
+    @Override
+    public User validateUserInChat(Long userId, Long chatId) {
+        User user = userRepository.findByUserInChat(userId, chatId);
+        if (user == null){
+            throw new InvalidActionException("You cannot send a message in this chat.");
+        }
+        return user;
     }
 
 }

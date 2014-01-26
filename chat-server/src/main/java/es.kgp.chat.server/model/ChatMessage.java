@@ -22,6 +22,10 @@ public class ChatMessage {
     @JoinColumn(name = "chat_id", nullable = false)
     private Chat chat;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Long getId() {
         return id;
     }
@@ -52,6 +56,14 @@ public class ChatMessage {
 
     public void setChat(Chat chat) {
         this.chat = chat;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
