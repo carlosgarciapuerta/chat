@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationConfig.class, MySQLDataSourceConfig.class})
 @Transactional
-public class UserFriendRepositoryCustomJpaTest {
+public class UserFriendRepositoryTest {
 
     @Autowired
     private UserFriendRepository userFriendRepository;
@@ -57,7 +57,6 @@ public class UserFriendRepositoryCustomJpaTest {
         userFriendRepository.save(userFriend);
 
         assertNotNull(userFriendRepository.findByFriendAndFriendOf(user1.getId(), user2.getId()));
-        assertNotNull(userFriendRepository.findByFriendAndFriendOf(user2.getId(), user1.getId()));
     }
 
     @Test
@@ -65,18 +64,7 @@ public class UserFriendRepositoryCustomJpaTest {
         should_insert_user_friend_and_the_symmetric_relationship();
         UserFriend userFriend = userFriendRepository.findByFriendAndFriendOf(user1.getId(), user2.getId());
         userFriendRepository.delete(userFriend);
-        int exceptionCount = 0;
-        try {
-            userFriendRepository.findByFriendAndFriendOf(user1.getId(), user2.getId());
-        } catch (NoResultException e){
-            exceptionCount++;
-        }
-        try {
-            userFriendRepository.findByFriendAndFriendOf(user2.getId(), user1.getId());
-        } catch (NoResultException e){
-            exceptionCount++;
-        }
-        assertEquals(exceptionCount, 2);
+        userFriendRepository.findByFriendAndFriendOf(user1.getId(), user2.getId());
     }
 
 }

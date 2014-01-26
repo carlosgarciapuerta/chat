@@ -110,6 +110,7 @@ public class UserRepositoryTest {
         em.persist(userFriend2);
 
         assertEquals(2, userRepository.findAllFriends(user1.getId()).size());
+        assertEquals(1, userRepository.findAllFriends(user2.getId()).size());
 
 
     }

@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
     User findByNickname(String nickname);
 
-    @Query("select u from User u INNER JOIN u.friends userFriend JOIN userFriend.friend friend where friend.id = :userId")
+    @Query("select u from User u INNER JOIN u.friends userFriend JOIN userFriend.friend friend JOIN userFriend.friendOf friendOf where friend.id = :userId or friendOf = :userId")
     List<User> findAllFriends(@Param("userId") Long userId);
 }
