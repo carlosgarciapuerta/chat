@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserFriendRepository extends JpaRepository<UserFriend, Long> {
 
-    @Query("select uf from UserFriend uf where uf.friend.id = :friendId and uf.friendOf.id = :friendOfId")
+    @Query("select uf from UserFriend uf where uf.friend.id = :friendId and uf.friendOf.id = :friendOfId and uf.accepted = true")
     UserFriend findByFriendAndFriendOf(@Param("friendId")Long friendId, @Param("friendOfId") Long friendOfId);
 
 }

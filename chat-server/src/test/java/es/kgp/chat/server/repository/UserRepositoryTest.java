@@ -93,10 +93,12 @@ public class UserRepositoryTest {
         UserFriend userFriend1 = new UserFriend();
         userFriend1.setFriend(user1);
         userFriend1.setFriendOf(user2);
+        userFriend1.setAccepted(true);
 
         UserFriend userFriend2 = new UserFriend();
         userFriend2.setFriend(user1);
         userFriend2.setFriendOf(user3);
+        userFriend2.setAccepted(false);
 
         user1.setFriends(new ArrayList<UserFriend>());
         user1.getFriends().add(userFriend1);
@@ -109,8 +111,9 @@ public class UserRepositoryTest {
         em.persist(userFriend1);
         em.persist(userFriend2);
 
-        assertEquals(2, userRepository.findAllFriends(user1.getId()).size());
+        assertEquals(1, userRepository.findAllFriends(user1.getId()).size());
         assertEquals(1, userRepository.findAllFriends(user2.getId()).size());
+        assertEquals(0, userRepository.findAllFriends(user3.getId()).size());
 
 
     }

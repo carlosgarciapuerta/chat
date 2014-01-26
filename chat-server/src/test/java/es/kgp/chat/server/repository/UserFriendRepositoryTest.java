@@ -16,6 +16,7 @@ import javax.persistence.NoResultException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by kgp on 19/01/2014.
@@ -50,21 +51,14 @@ public class UserFriendRepositoryTest {
     }
 
     @Test
-    public void should_insert_user_friend_and_the_symmetric_relationship(){
+    public void should_return_zero_friends(){
         UserFriend userFriend = new UserFriend();
         userFriend.setFriend(user1);
         userFriend.setFriendOf(user2);
+        userFriend.setAccepted(false);
         userFriendRepository.save(userFriend);
 
-        assertNotNull(userFriendRepository.findByFriendAndFriendOf(user1.getId(), user2.getId()));
-    }
-
-    @Test
-    public void should_delete_user_friend_and_the_symmetric_relationship(){
-        should_insert_user_friend_and_the_symmetric_relationship();
-        UserFriend userFriend = userFriendRepository.findByFriendAndFriendOf(user1.getId(), user2.getId());
-        userFriendRepository.delete(userFriend);
-        userFriendRepository.findByFriendAndFriendOf(user1.getId(), user2.getId());
+        assertNull(userFriendRepository.findByFriendAndFriendOf(user1.getId(), user2.getId()));
     }
 
 }

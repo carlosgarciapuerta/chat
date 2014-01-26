@@ -23,6 +23,9 @@ public class UserFriend {
     @JoinColumn(name = "friend_id", nullable = false)
     private User friendOf;
 
+    @Column(nullable = false)
+    private Boolean accepted;
+
     public Long getId() {
         return Id;
     }
@@ -47,6 +50,14 @@ public class UserFriend {
         this.friendOf = friendOf;
     }
 
+    public Boolean getAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,8 +66,9 @@ public class UserFriend {
         UserFriend that = (UserFriend) o;
 
         if (Id != null ? !Id.equals(that.Id) : that.Id != null) return false;
-        if (friendOf != null ? !friendOf.equals(that.friendOf) : that.friendOf != null) return false;
+        if (accepted != null ? !accepted.equals(that.accepted) : that.accepted != null) return false;
         if (friend != null ? !friend.equals(that.friend) : that.friend != null) return false;
+        if (friendOf != null ? !friendOf.equals(that.friendOf) : that.friendOf != null) return false;
 
         return true;
     }
@@ -66,6 +78,7 @@ public class UserFriend {
         int result = Id != null ? Id.hashCode() : 0;
         result = 31 * result + (friend != null ? friend.hashCode() : 0);
         result = 31 * result + (friendOf != null ? friendOf.hashCode() : 0);
+        result = 31 * result + (accepted != null ? accepted.hashCode() : 0);
         return result;
     }
 }
