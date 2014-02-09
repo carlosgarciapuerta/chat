@@ -28,7 +28,7 @@ public class SecurityControllerInterceptor implements HandlerInterceptor{
         if (!handlerMethod.getMethod().isAnnotationPresent(NotSecured.class)){
             Cookie sessionToken = null;
             for (Cookie cookie : httpServletRequest.getCookies()) {
-                if (cookie.getName().equals("sessionToken")){
+                if (cookie.getName().equals("sessionCookie")){
                     sessionToken = cookie;
                     break;
                 }
@@ -36,7 +36,7 @@ public class SecurityControllerInterceptor implements HandlerInterceptor{
             if (sessionToken != null){
                 Session session = sessionService.refreshToken(sessionToken.getValue(), httpServletRequest.getHeader("User-Agent"));
                 sessionToken = new CookieBuilder(sessionToken.getName(), session.getToken())
-                        .withDomain(httpServletRequest.getHeader("Origin"))
+                        //.withDomain(httpServletRequest.getHeader("Origin"))
                         .withMaxAge(900)
                         .withPath("/")
                         .build();

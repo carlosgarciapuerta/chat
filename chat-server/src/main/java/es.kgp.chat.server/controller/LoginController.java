@@ -1,7 +1,7 @@
 package es.kgp.chat.server.controller;
 
 import es.kgp.chat.server.controller.security.CookieBuilder;
-import es.kgp.chat.server.controller.security.Login;
+import es.kgp.chat.server.controller.dto.Login;
 import es.kgp.chat.server.controller.security.NotSecured;
 import es.kgp.chat.server.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +27,8 @@ public class LoginController {
     @NotSecured
     public void login(@RequestBody @Valid Login login, @RequestHeader("User-Agent") String userAgent, @RequestHeader("Origin") String origin, HttpServletResponse response){
         String token = sessionService.login(login, userAgent);
-        Cookie sessionToken = new CookieBuilder("sessionToken", token)
-            //.secured(true)
-            .withDomain("127.0.0.1")
+        Cookie sessionToken = new CookieBuilder(SessionService.SESSION_TOKEN, token)
+            //.withDomain("127.0.0.1")
             .withMaxAge(900)
             .withPath("/")
             .build();
@@ -43,5 +42,15 @@ public class LoginController {
     public void logout(@CookieValue("sessionToken") String token){
         sessionService.logout(token);
     }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @NotSecured
+    public void register(@RequestBody @Valid Login login, @RequestHeader("User-Agent") String userAgent, @RequestHeader("Origin") String origin, HttpServletResponse response){
+        sessionService.login(login, userAgent);
+        login(login, userAgent, origin, response);
+    }
+
+
 
 }

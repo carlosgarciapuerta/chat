@@ -6,7 +6,7 @@ import es.kgp.chat.server.model.Session;
 import es.kgp.chat.server.model.User;
 import es.kgp.chat.server.repository.SessionRepository;
 import es.kgp.chat.server.repository.UserRepository;
-import es.kgp.chat.server.controller.security.Login;
+import es.kgp.chat.server.controller.dto.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +69,11 @@ public class DefaultSessionService implements SessionService{
         session.setExpirationTime(null);
         session = sessionRepository.save(session);
         return session;
+    }
+
+    @Override
+    public void register(User user, String userAgent) {
+        userRepository.saveAndFlush(user);
     }
 
 }

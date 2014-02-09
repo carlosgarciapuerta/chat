@@ -1,5 +1,6 @@
 package es.kgp.chat.server.controller;
 
+import es.kgp.chat.server.controller.dto.FriendResponse;
 import es.kgp.chat.server.controller.dto.FriendshipRequest;
 import es.kgp.chat.server.model.Session;
 import es.kgp.chat.server.model.User;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,8 +26,15 @@ public class FriendsController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public List<User> findAllFriends(Session session) throws Exception {
-        return friendsService.findAllFriends(session.getUser().getId());
+    public List<FriendResponse> findAllFriends(Session session) throws Exception {
+        List<User> friends = friendsService.findAllFriends(session.getUser().getId());
+        List<FriendResponse> response = new ArrayList<>();
+        for (User friend : friends){
+            FriendResponse friendResponse = new FriendResponse();
+            friendResponse.setNickname(friend.getNickname());
+            response.add(friendResponse);
+        }
+        return response;
     }
 
     @RequestMapping(value = "/request", method = RequestMethod.POST)
